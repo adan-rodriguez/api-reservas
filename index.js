@@ -11,21 +11,25 @@ const connection = await mysql.createConnection({
 const app = express()
 app.use(express.json())
 
-app.get("/reservas", async (req, res) => {
-    const [reservations] = await connection.query("SELECT * FROM reservas")
-    res.json(reservations)
+app.get("/salones", async (req, res) => {
+    const [halls] = await connection.query("SELECT * FROM salones")
+    res.json(halls)
 })
 
-app.get("/reservas/:id", async (req, res) => {
+app.get("/salones/:id", async (req, res) => {
     const {id} = req.params
-    const [[reservation]] = await connection.query("SELECT * FROM reservas WHERE reserva_id = ?", [id])
-    res.json(reservation)
+    const [[hall]] = await connection.query("SELECT * FROM salones WHERE salon_id = ?", [id])
+    res.json(hall)
 })
 
-app.patch("/reservas", async (req, res) => {
-    const body = req.body
-    console.log(body);
-    res.json({})
+app.put("/salones", async (req, res) => {
+    const { titulo, direccion, importe } = req.body
+    
+    const [result] = await connection.query('INSERT INTO salones (titulo, direccion, importe) VALUES (?, ?, ?)',
+        [titulo, direccion, importe])
+        
+        const [[newHall]] = await connection.query('SELECT * FROM salones WHERE salon_id = ?', [result.insertId])
+        res.json(newHall)
 })
 
 app.listen(3000, console.log("Servidor escuchando en http://localhost:3000"))
