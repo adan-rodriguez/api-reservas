@@ -11,10 +11,6 @@ const connection = await mysql.createConnection({
 const app = express()
 app.use(express.json())
 
-app.get("/", (req, res) => {
-    res.send("Hola mundo")
-})
-
 app.get("/reservas", async (req, res) => {
     const [reservations] = await connection.query("SELECT * FROM reservas")
     res.json(reservations)
