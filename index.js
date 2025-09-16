@@ -22,7 +22,7 @@ app.get("/salones/:id", async (req, res) => {
     res.json(hall)
 })
 
-app.put("/salones", async (req, res) => {
+app.post("/salones", async (req, res) => {
     const { titulo, direccion, importe } = req.body
     
     const [result] = await connection.query('INSERT INTO salones (titulo, direccion, importe) VALUES (?, ?, ?)',
