@@ -1,5 +1,6 @@
 import express from "express";
 import mysql from "mysql2/promise";
+import { PORT } from "./config.js";
 
 const connection = await mysql.createConnection({
   host: "localhost",
@@ -62,4 +63,4 @@ app.delete("/salones/:id", async (req, res) => {
   res.json(result);
 });
 
-app.listen(3000, console.log("Servidor escuchando en http://localhost:3000"));
+app.listen(PORT, () => console.log(`Servidor escuchando en http://localhost:${PORT}`));
