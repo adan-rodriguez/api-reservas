@@ -1,61 +1,32 @@
-import mysql from "mysql2/promise";
-
-const connection = await mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "",
-  database: "reservas",
-});
+import { HallsModel } from "../models/halls.js";
 
 export class HallsController {
   static getAll = async (req, res) => {
-  const [halls] = await connection.query("SELECT * FROM salones");
-  res.json(halls);
-}
+    const halls = await HallsModel.getAll();
+    res.json(halls);
+  };
 
   static getById = async (req, res) => {
-  const { id } = req.params;
-
-  const [[hall]] = await connection.query(
-    "SELECT * FROM salones WHERE salon_id = ?",
-    [id]
-  );
-  res.json(hall);
-}
+    const { id } = req.params;
+    const hall = await HallsModel.getById({ id });
+    res.json(hall);
+  };
 
   static create = async (req, res) => {
-  const { titulo, direccion, importe } = req.body;
-
-  const [result] = await connection.query(
-    "INSERT INTO salones (titulo, direccion, importe) VALUES (?, ?, ?)",
-    [titulo, direccion, importe]
-  );
-
-  const [[newHall]] = await connection.query(
-    "SELECT * FROM salones WHERE salon_id = ?",
-    [result.insertId]
-  );
-  res.json(newHall);
-}
+    const newHall = await HallsModel.create(req.body);
+    res.status(201).json(newHall);
+  };
 
   static update = async (req, res) => {
-  const { id } = req.params;
-  const { titulo } = req.body;
-
-  const [result] = await connection.query(
-    "UPDATE salones SET titulo = ? WHERE salon_id = ?",
-    [titulo, id]
-  );
-  res.json(result);
-}
+    const { id } = req.params;
+    const updatedHall = await HallsModel.update({ id, input: req.body });
+    res.json(updatedHall);
+  };
 
   static delete = async (req, res) => {
-  const { id } = req.params;
+    const { id } = req.params;
 
-  const [result] = await connection.query(
-    "DELETE FROM salones WHERE salon_id = ?",
-    [id]
-  );
-  res.json(result);
-}
+    const result = await HallsModel.delete({ id });
+    res.json(result);
+  };
 }
