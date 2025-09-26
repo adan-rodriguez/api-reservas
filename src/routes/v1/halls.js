@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { HallsController } from "../controllers/halls.js";
+import { HallsController } from "../../controllers/halls.js";
 
 export const hallsRouter = Router();
 
