@@ -1,9 +1,9 @@
-import { HallsModel } from "../models/halls.js";
+import { HallsServices } from "../services/halls.js";
 
 export class HallsController {
   static getAll = async (req, res) => {
     try {
-      const halls = await HallsModel.getAll();
+      const halls = await HallsServices.getAll();
       res.json({ success: true, data: halls });
     } catch (error) {
       res.status(500).json({
@@ -16,7 +16,7 @@ export class HallsController {
   static getById = async (req, res) => {
     const { id } = req.params;
     try {
-      const hall = await HallsModel.getById({ id });
+      const hall = await HallsServices.getById({ id });
 
       if (!hall) {
         return res.status(404).json({
@@ -44,7 +44,11 @@ export class HallsController {
     }
 
     try {
-      const newHall = await HallsModel.create({ titulo, direccion, importe });
+      const newHall = await HallsServices.create({
+        titulo,
+        direccion,
+        importe,
+      });
       res.status(201).json({ success: true, data: newHall });
     } catch (error) {
       res.status(500).json({
@@ -66,7 +70,7 @@ export class HallsController {
 
     const { id } = req.params;
     try {
-      const updatedHall = await HallsModel.update({ id, input: { titulo } });
+      const updatedHall = await HallsServices.update({ id, input: { titulo } });
       res.json({ success: true, data: updatedHall });
     } catch (error) {
       if (error.message === "Salón no encontrado.") {
@@ -86,7 +90,7 @@ export class HallsController {
   static delete = async (req, res) => {
     const { id } = req.params;
     try {
-      await HallsModel.delete({ id });
+      await HallsServices.delete({ id });
       res.json({ success: true, message: "Salón eliminado exitosamente." });
     } catch (error) {
       if (error.message === "Salón no encontrado.") {

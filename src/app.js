@@ -9,6 +9,6 @@ app.use("/api", router);
 app.use((req, res) => {
   res.status(404).json({
     success: false,
-    error: { message: "NOT FOUND." },
+    error: { message: "NOT FOUND" },
   });
 });
