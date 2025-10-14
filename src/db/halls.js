@@ -17,11 +17,13 @@ export class Halls {
   }
 
   static async create(input) {
-    const { titulo, direccion, importe } = input;
+    const columns = Object.keys(input).join(", ");
+    const values = Object.values(input);
+    const placeholders = values.map(() => "?").join(", ");
 
     const [result] = await connection.execute(
-      "INSERT INTO salones (titulo, direccion, importe) VALUES (?, ?, ?)",
-      [titulo, direccion, importe]
+      `INSERT INTO salones (${columns}) VALUES (${placeholders})`,
+      values
     );
 
     const [[newHall]] = await connection.execute(
@@ -32,10 +34,14 @@ export class Halls {
   }
 
   static async update({ id, input }) {
-    const { titulo } = input;
+    const columns = Object.keys(input);
+    const values = Object.values(input);
+
+    const set = columns.map((key) => `${key} = ?`).join(", ");
+
     const [{ affectedRows }] = await connection.execute(
-      "UPDATE salones SET titulo = ? WHERE salon_id = ?",
-      [titulo, id]
+      `UPDATE salones SET ${set} WHERE salon_id = ?`,
+      [...values, id]
     );
 
     if (affectedRows === 0) {

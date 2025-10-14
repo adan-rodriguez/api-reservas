@@ -6,4 +6,5 @@ export const connection = await mysql.createConnection({
   user: DB_USER,
   password: DB_PASSWORD,
   database: DB_NAME,
+  decimalNumbers: true,
 });

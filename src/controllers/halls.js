@@ -1,9 +1,12 @@
 import { HallsServices } from "../services/halls.js";
+import apicache from "apicache";
 
 export class HallsController {
   static getAll = async (req, res) => {
     try {
       const halls = await HallsServices.getAll();
+      console.log("sirviendo datos desde el servidor");
+
       res.json({ success: true, data: halls });
     } catch (error) {
       res.status(500).json({
@@ -35,20 +38,9 @@ export class HallsController {
   };
 
   static create = async (req, res) => {
-    const { titulo, direccion, importe } = req.body; // POR AHORA SOLO ESTOS TRES PORQUE SON LOS REQUERIDOS. DESPUES VEMOS LOS DEMÁS
-    if (!titulo || !direccion || !importe) {
-      return res.status(400).json({
-        succes: false,
-        error: { mensaje: "Faltan campos requeridos." },
-      });
-    }
-
     try {
-      const newHall = await HallsServices.create({
-        titulo,
-        direccion,
-        importe,
-      });
+      const newHall = await HallsServices.create(req.body);
+      apicache.clear("/api/v1/salones");
       res.status(201).json({ success: true, data: newHall });
     } catch (error) {
       res.status(500).json({
@@ -59,18 +51,10 @@ export class HallsController {
   };
 
   static update = async (req, res) => {
-    const { titulo } = req.body; // POR AHORA SOLO EL TÍTULO. DESPUES VEMOS LOS DEMÁS
-
-    if (!titulo) {
-      return res.status(400).json({
-        succes: false,
-        error: { mensaje: "Faltan campos requeridos." },
-      });
-    }
-
     const { id } = req.params;
     try {
-      const updatedHall = await HallsServices.update({ id, input: { titulo } });
+      const updatedHall = await HallsServices.update({ id, input: req.body });
+      apicache.clear("/api/v1/salones");
       res.json({ success: true, data: updatedHall });
     } catch (error) {
       if (error.message === "Salón no encontrado.") {
@@ -91,6 +75,7 @@ export class HallsController {
     const { id } = req.params;
     try {
       await HallsServices.delete({ id });
+      apicache.clear("/api/v1/salones");
       res.json({ success: true, message: "Salón eliminado exitosamente." });
     } catch (error) {
       if (error.message === "Salón no encontrado.") {
