@@ -1,5 +1,7 @@
 // ACTUALICEN A LA ÚLTIMA VERSIÓN ESTABLE DE NODE para que funcione --env-file-if-exists=.env!!!
 
+process.loadEnvFile();
+
 export const {
   PORT = 3000,
   DB_HOST = "localhost",
