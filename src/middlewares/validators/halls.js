@@ -3,30 +3,30 @@ import { body, matchedData, validationResult } from "express-validator";
 export class HallValidator {
   static titulo = body("titulo")
     .trim()
-    .isLength({ min: 1, max: 255 })
-    .withMessage("El título debe tener entre 1 y 255 caracteres");
+    .isLength({ max: 255 })
+    .withMessage("El título no puede superar los 255 caracteres");
 
   static direccion = body("direccion")
     .trim()
-    .isLength({ min: 1, max: 255 })
-    .withMessage("La dirección debe tener entre 1 y 255 caracteres");
+    .isLength({ max: 255 })
+    .withMessage("La dirección no puede superar los 255 caracteres");
 
   static importe = body("importe")
     .isFloat({ min: 0 })
     .withMessage("El importe debe ser positivo o cero");
 
   static capacidad = body("capacidad")
-    .optional({ nullable: true })
+    .optional()
     .isInt({ min: 1 })
     .withMessage("La capacidad debe ser un número entero positivo");
 
   static latitud = body("latitud")
-    .optional({ nullable: true })
+    .optional()
     .isFloat({ min: -90, max: 90 })
     .withMessage("La latitud debe estar entre -90 y 90");
 
   static longitud = body("longitud")
-    .optional({ nullable: true })
+    .optional()
     .isFloat({ min: -180, max: 180 })
     .withMessage("La longitud debe estar entre -180 y 180");
 
@@ -36,7 +36,13 @@ export class HallValidator {
     if (!errors.isEmpty()) {
       return res.status(400).json({
         success: false,
-        errors: { message: errors.array() },
+        error: {
+          message: "Error de validación",
+          details: errors.array().map((err) => ({
+            field: err.path,
+            message: err.msg,
+          })),
+        },
       });
     }
 

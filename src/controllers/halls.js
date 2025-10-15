@@ -5,8 +5,6 @@ export class HallsController {
   static getAll = async (req, res) => {
     try {
       const halls = await HallsServices.getAll();
-      console.log("sirviendo datos desde el servidor");
-
       res.json({ success: true, data: halls });
     } catch (error) {
       res.status(500).json({
