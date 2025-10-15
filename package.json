@@ -5,14 +5,22 @@
   "type": "module",
   "scripts": {
     "start": "node --watch src/server.js",
+    "dev": "nodemon src/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
+  "author": "Micaela Canosa, Tatiana López, Adán Rodríguez, Cristian Faure",
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "apicache": "^1.6.3",
+    "dotenv": "^17.2.2",
     "express": "^5.1.0",
-    "mysql2": "^3.14.5"
+    "express-validator": "^7.2.1",
+    "handlebars": "^4.7.8",
+    "mysql2": "^3.14.5",
+    "nodemailer": "^7.0.6"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
   }
 }

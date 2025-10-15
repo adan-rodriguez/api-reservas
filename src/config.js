@@ -1,8 +1,8 @@
-// try {
-//   process.loadEnvFile();
-// } catch (err) {
-//   console.warn("⚠️ No se encontró el archivo .env");
-// }
+try {
+    process.loadEnvFile();
+} catch (err) {
+ console.warn("⚠️ No se encontró el archivo .env");
+}
 
 // ACTUALICEN A LA ÚLTIMA VERSIÓN ESTABLE DE NODE!!!
 
